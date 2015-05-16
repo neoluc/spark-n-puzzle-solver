@@ -19,7 +19,11 @@ def solve_puzzle(width, height, output_path, slave_number):
 			.reduceByKey(lambda step_level_a, step_level_b: min(step_level_a, step_level_b))\
 			.partitionBy(slave_number)
 
-	boards_rdd.map(lambda step: (step[1], Sliding.hash_to_board(width, height, step[0]))).sortByKey().coalesce(1).saveAsTextFile(output_path)
+	boards_rdd\
+		.map(lambda step: (step[1], Sliding.hash_to_board(width, height, step[0])))\
+		.sortByKey()\
+		.coalesce(1)\
+		.saveAsTextFile(output_path)
 	sc.stop()
 
 if __name__ == "__main__":
